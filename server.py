@@ -34,23 +34,27 @@ def generate_query():
     schema = getSchema(conn)
 
     # Get prompt text from request
-    prompt = ''.join(schema) + "\n###" + request.json['prompt'] + "\nSELECT"
+    prompt = ''.join(schema) + "\n###" + request.json['prompt']
+    print(prompt)
     # Set OpenAI API parameters
     model_engine = "code-davinci-002"  # choose a GPT-3 engine
-    max_tokens = 1048  # maximum number of tokens generated
-    temperature = 0.3  # controls the randomness of the generated text
-    stop_sequence = ["#", ";", "\n"]  # character sequence to stop text generation
+    max_tokens = 512  # maximum number of tokens generated
+    temperature = 0  # controls the randomness of the generated text
+    stop_sequence = ["#", ";"]  # character sequence to stop text generation
     # Call OpenAI API to generate text
     response = openai.Completion.create(
         engine=model_engine,
         prompt=prompt,
         max_tokens=max_tokens,
         temperature=temperature,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0,
         stop=stop_sequence
     )
     # Return generated text in JSON format
-    return jsonify({'text': "SELECT" + response.choices[0].text})
+    return jsonify({'text': response.choices[0].text})
 
 
 if __name__ == '__main__':
-    app.run(debug=True,host='0.0.0.0',port=int(os.environ.get('PORT', 5000)))
+    app.run(debug=True,host='0.0.0.0',port=int(os.environ.get('PORT', 5050)))
