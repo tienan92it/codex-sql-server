@@ -8,7 +8,7 @@ load_dotenv()
 
 app = Flask(__name__)
 
-# API_KEY = os.getenv('API_KEY')
+API_KEY = os.getenv('API_KEY')
 # HOST = os.getenv('HOST')
 # DATABASE = os.getenv('DATABASE')
 # USER = os.getenv('USER')
@@ -24,13 +24,14 @@ app = Flask(__name__)
 @app.route('/open-ai/query', methods=['POST'])
 def generate_query():
     # Set OpenAI API key
-    openai.api_key = request.json['api_key']
+    # openai.api_key = request.json['api_key']
+    openai.api_key = API_KEY
     # Fetch the schema from the database
     host = request.json['host']
-    database = request.json['database']
+    db = request.json['database']
     user = request.json['user']
     password = request.json['password']
-    conn = 'postgresql+psycopg2://' + user + ':' + password + '@' + host + '/' + database
+    conn = 'postgresql+psycopg2://' + user + ':' + password + '@' + host + '/' + database_name
     schema = getSchema(conn)
 
     # Get prompt text from request
