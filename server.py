@@ -27,9 +27,6 @@ def generate_query():
     openai.api_key = request.json['api_key']
     # Fetch the schema from the database
     host = request.json['host']
-    database = request.json['database']
-    user = request.json['user']
-    password = request.json['password']
     conn = 'postgresql+psycopg2://' + user + ':' + password + '@' + host + '/' + database
     schema = getSchema(conn)
 
